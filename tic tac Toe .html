@@ -1,0 +1,126 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+		
+		#game-board {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			grid-gap: 10px;
+			width: 300px;
+			margin: 40px auto;
+		}
+		
+		.cell {
+			background-color: #f0f0f0;
+			padding: 40px;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			font-size: 36px;
+			font-weight: bold;
+		}
+		
+		.cell:hover {
+			background-color: #ddd;
+		}
+		
+		#result {
+			font-size: 36px;
+			font-weight: bold;
+			margin-top: 20px;
+			text-align: center;
+		}
+		
+		#reset {
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		
+		#reset:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+	<div id="game-board">
+		<button class="cell" data-index="0"></button>
+		<button class="cell" data-index="1"></button>
+		<button class="cell" data-index="2"></button>
+		<button class="cell" data-index="3"></button>
+		<button class="cell" data-index="4"></button>
+		<button class="cell" data-index="5"></button>
+		<button class="cell" data-index="6"></button>
+		<button class="cell" data-index="7"></button>
+		<button class="cell" data-index="8"></button>
+	</div>
+	
+	<div id="result"></div>
+	
+	<button id="reset">Reset Game</button>
+	
+	<script>
+		let currentPlayer = 'X';
+		let gameBoard = ['','','','','','','','',''];
+		let gameOver = false;
+		
+		document.querySelectorAll('.cell').forEach((cell) => {
+			cell.addEventListener('click', () => {
+				if (gameOver) return;
+				if (gameBoard[cell.dataset.index] !== '') return;
+				
+				gameBoard[cell.dataset.index] = currentPlayer;
+				cell.textContent = currentPlayer;
+				
+				checkWin();
+				currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+			});
+		});
+		
+		document.getElementById('reset').addEventListener('click', () => {
+			gameOver = false;
+			currentPlayer = 'X';
+			gameBoard = ['','','','','','','','',''];
+			document.querySelectorAll('.cell').forEach((cell) => cell.textContent = '');
+		});
+		
+		function checkWin() {
+			const winConditions = [
+				[0, 1, 2],
+				[3, 4, 5],
+				[6, 7, 8],
+				[0, 3, 6],
+				[1, 4, 7],
+				[2, 5, 8],
+				[0, 4, 8],
+				[2, 4, 6],
+			];
+			
+			for (let i = 0; i < winConditions.length; i++) {
+				const [a, b, c] = winConditions[i];
+				if (gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+					document.getElementById('result').textContent = `Player ${gameBoard[a]} wins!`;
+					gameOver = true;
+					return;
+				}
+			}
+			
+			if (!gameBoard.includes('')) {
+				document.getElementById('result').textContent = 'It\'s a draw!';
+				gameOver = true;
+			}
+		}
+	</script>
+</body>
+</html>
+```
